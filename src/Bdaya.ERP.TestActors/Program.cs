@@ -17,14 +17,15 @@ namespace Bdaya.ERP.TestActors
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<IEmailNotification, EmailNotification>();
             serviceCollection.AddSingleton<NotificationActor>();
+            serviceCollection.AddSingleton<TextNotificationActor>();
             var serviceProvider =  serviceCollection.BuildServiceProvider();
             var actorSystem = ActorSystem.Create("My-Test-Actor");
             actorSystem.UseServiceProvider(serviceProvider);
-            var actor = actorSystem.ActorOf(actorSystem.DI().Props<NotificationActor>());
-            actor.Tell("Hello I am a notification actor");
-
+            var notiActor = actorSystem.ActorOf(actorSystem.DI().Props<NotificationActor>());
+            notiActor.Tell("Hello I am a notification actor");
             Thread.Sleep(5000);
-            actorSystem.Stop(actor);
+            actorSystem.Stop(notiActor);
+           
 
             Thread.Sleep(5000);
 
